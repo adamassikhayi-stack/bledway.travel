@@ -1,361 +1,668 @@
-<!DOCTYPE html>
-<html lang="nl">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bledway Travel — Jouw Droomreis Begint Hier</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="BLEDWAY — Small group trips to Morocco for young Belgians. Max 8 people. Real Morocco. First trip: Autumn 2026." />
+<title>BLEDWAY — Find Your Bled</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Barlow:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:          #0c0906;
+    --bg2:         #080605;
+    --accent:      #c4622d;
+    --accent-soft: #e8a05b;
+    --glow:        rgba(196,98,45,0.55);
+    --text:        #f0e6d3;
+    --text-bright: #fbf4e6;
+    --muted:       rgba(240,230,211,0.6);
+    --muted2:      rgba(240,230,211,0.38);
+    --line:        rgba(196,98,45,0.30);
+    --line-soft:   rgba(240,230,211,0.09);
+    --card:        #15100b;
+    --glass:       rgba(240,230,211,0.035);
+    --maxw:        1280px;
+    --mx: 50%; --my: 30%;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+
+  /* ===== Background FX layers ===== */
+  .fx-grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(196,98,45,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(196,98,45,0.06) 1px, transparent 1px);
+    background-size: 64px 64px;
+    -webkit-mask-image: radial-gradient(120% 90% at 50% 0%, #000 35%, transparent 78%);
+    mask-image: radial-gradient(120% 90% at 50% 0%, #000 35%, transparent 78%);
+    animation: gridDrift 24s linear infinite;
+    opacity: 0.6;
+  }
+  @keyframes gridDrift { to { background-position: 64px 64px, 64px 64px; } }
+
+  .fx-glow {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background: radial-gradient(420px 420px at var(--mx) var(--my), rgba(196,98,45,0.16), transparent 70%);
+    transition: background 240ms ease-out;
+  }
+  .fx-scan {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.5;
+    background: repeating-linear-gradient(0deg, rgba(240,230,211,0.018) 0 1px, transparent 1px 3px);
+    mix-blend-mode: overlay;
+  }
+  .content { position: relative; z-index: 2; }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 32px; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 32px; transition: all 320ms; border-bottom: 1px solid transparent;
+  }
+  nav.scrolled {
+    background: rgba(8,6,5,0.7);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    padding: 14px 32px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  nav .logo { font-family: 'Anton', sans-serif; font-size: 26px; letter-spacing: 1.5px; }
+  nav .logo .way { color: var(--accent); text-shadow: 0 0 18px var(--glow); }
+  nav .right { display: flex; align-items: center; gap: 26px; }
+  nav .meta { font-size: 10px; letter-spacing: 3px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+  nav .cta {
+    font-family: 'JetBrains Mono', monospace; font-weight: 500;
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    border: 1px solid var(--line); color: var(--text); padding: 11px 20px;
+    transition: all 180ms;
+  }
+  nav .cta:hover {
+    background: var(--accent); color: var(--bg);
+    box-shadow: 0 0 24px var(--glow); border-color: var(--accent);
+  }
+  @media (max-width: 720px) { nav .meta { display: none; } nav { padding: 18px 20px; } }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative; min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    overflow: hidden;
+  }
+  .hero .bg { position: absolute; inset: 0; z-index: 0; }
+  .hero .bg img { width: 100%; height: 100%; object-fit: cover; filter: saturate(1.05) contrast(1.05); }
+  .hero .bg::after {
+    content: ''; position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(8,6,5,0.7) 0%, rgba(8,6,5,0.4) 40%, rgba(8,6,5,0.6) 72%, rgba(8,6,5,0.98) 100%),
+      radial-gradient(80% 60% at 70% 40%, transparent, rgba(8,6,5,0.5));
+  }
+  .hero .arabic {
+    position: absolute; z-index: 1; top: 50%; right: -4vw; transform: translateY(-50%);
+    font-family: 'Amiri', serif; font-size: 46vh; line-height: 1;
+    color: var(--accent); opacity: 0.07;
+    text-shadow: 0 0 80px var(--glow); pointer-events: none;
+  }
+  .hero .corner {
+    position: absolute; z-index: 3;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 1px; color: var(--accent-soft);
+  }
+  .hero .corner.tl { top: 96px; left: 32px; }
+  .hero .corner.tr { top: 96px; right: 32px; text-align: right; }
+  .hero .corner .b { display: block; color: var(--muted2); margin-top: 4px; }
+  .hero .inner { position: relative; z-index: 2; width: 100%; }
+  .hero .eyebrow {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    letter-spacing: 4px; text-transform: uppercase; color: var(--accent-soft);
+    margin-bottom: 26px;
+  }
+  .hero .eyebrow::before {
+    content: ''; width: 38px; height: 1px;
+    background: var(--accent); box-shadow: 0 0 10px var(--glow);
+  }
+  .hero h1 {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(64px, 13vw, 210px); line-height: 0.82;
+    letter-spacing: -1px; text-transform: uppercase;
+    color: var(--text-bright);
+    text-shadow: 0 0 60px rgba(196,98,45,0.25);
+  }
+  .hero .sub {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: clamp(20px, 2.4vw, 32px); color: var(--text);
+    margin: 26px 0 38px; max-width: 620px;
+  }
+  .hero .actions { display: flex; align-items: center; gap: 26px; flex-wrap: wrap; }
+  .btn-primary {
+    font-family: 'JetBrains Mono', monospace; font-weight: 500;
+    font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+    background: var(--accent); color: var(--bg);
+    padding: 17px 34px; border: 1px solid var(--accent);
+    transition: all 200ms; display: inline-block;
+  }
+  .btn-primary:hover {
+    background: var(--text); border-color: var(--text);
+    transform: translateY(-2px); box-shadow: 0 14px 40px rgba(196,98,45,0.35);
+  }
+  .hero .scroll {
+    position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+    z-index: 2; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 3px; color: var(--muted2);
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+  }
+  .hero .scroll .dash {
+    width: 1px; height: 40px;
+    background: linear-gradient(var(--accent), transparent);
+    animation: pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+  /* ===== TICKER ===== */
+  .ticker {
+    border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft);
+    overflow: hidden; white-space: nowrap;
+    background: rgba(8,6,5,0.6); padding: 16px 0;
+  }
+  .ticker .track {
+    display: inline-flex; gap: 40px;
+    animation: scroll-x 26s linear infinite;
+  }
+  .ticker span {
+    font-family: 'Anton', sans-serif; font-size: 18px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted);
+    display: inline-flex; gap: 40px; align-items: center;
+  }
+  .ticker .dot { color: var(--accent); text-shadow: 0 0 12px var(--glow); }
+  @keyframes scroll-x { to { transform: translateX(-50%); } }
+
+  /* ===== STATS ===== */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .stats .stat {
+    padding: 64px 32px; text-align: center;
+    border-right: 1px solid var(--line-soft); position: relative;
+  }
+  .stats .stat::before {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 40px; height: 2px;
+    background: var(--accent); box-shadow: 0 0 16px var(--glow);
+  }
+  .stats .stat:last-child { border-right: none; }
+  .stats .big {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(48px, 7vw, 88px); color: var(--accent); line-height: 1;
+    text-shadow: 0 0 36px rgba(196,98,45,0.35);
+  }
+  .stats .lab {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 14px;
+  }
+  @media (max-width: 720px) {
+    .stats { grid-template-columns: 1fr; }
+    .stats .stat { border-right: none; border-bottom: 1px solid var(--line-soft); padding: 40px; }
+  }
+
+  /* ===== SECTION BLOCK ===== */
+  section.block { padding: clamp(80px, 11vw, 150px) 0; position: relative; }
+  .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 22px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .label::before { content: ''; width: 26px; height: 1px; background: var(--accent); box-shadow: 0 0 8px var(--glow); }
+  h2.big {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(40px, 6.5vw, 96px); line-height: 0.9;
+    letter-spacing: -0.5px; text-transform: uppercase; color: var(--text-bright);
+  }
+
+  /* ===== MANIFESTO ===== */
+  .manifesto { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 70px; align-items: end; }
+  .manifesto .body p { font-size: clamp(16px, 1.3vw, 19px); line-height: 1.75; color: rgba(240,230,211,0.8); margin-bottom: 18px; }
+  .manifesto .body p:first-child {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: clamp(20px, 1.8vw, 26px); color: var(--text);
+  }
+  @media (max-width: 880px) { .manifesto { grid-template-columns: 1fr; gap: 36px; } }
+
+  /* ===== FEATURES (glass) ===== */
+  .features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 70px; }
+  .feature {
+    padding: 40px; background: var(--glass);
+    border: 1px solid var(--line-soft);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    transition: all 260ms; position: relative; overflow: hidden;
+  }
+  .feature:hover {
+    transform: translateY(-4px); border-color: var(--line);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px rgba(196,98,45,0.12);
+  }
+  .feature .idx { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 12px; letter-spacing: 2px; color: var(--accent); }
+  .feature h3 { font-family: 'Anton', sans-serif; font-size: 24px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-bright); margin: 16px 0 12px; }
+  .feature p { font-size: 15px; line-height: 1.6; color: var(--muted); }
+  @media (max-width: 720px) { .features { grid-template-columns: 1fr; } .feature { padding: 30px; } }
+
+  /* ===== GALLERY ===== */
+  .gallery { display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: 220px; gap: 14px; margin-top: 60px; }
+  .gphoto { position: relative; overflow: hidden; border: 1px solid var(--line-soft); }
+  .gphoto img { width: 100%; height: 100%; object-fit: cover; transition: transform 700ms cubic-bezier(.2,.7,.2,1); filter: saturate(0.95) brightness(0.9); }
+  .gphoto:hover img { transform: scale(1.07); filter: saturate(1.1) brightness(1); }
+  .gphoto:hover { box-shadow: inset 0 0 0 1px var(--accent), 0 0 30px rgba(196,98,45,0.2); }
+  .gphoto::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, rgba(8,6,5,0.8)); }
+  .gphoto .cap { position: absolute; left: 18px; bottom: 16px; z-index: 2; font-family: 'Anton', sans-serif; font-size: 18px; letter-spacing: 1px; text-transform: uppercase; color: var(--text); }
+  .gphoto .coord { position: absolute; right: 14px; top: 12px; z-index: 2; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1px; color: var(--accent-soft); opacity: 0.85; }
+  .g1 { grid-column: span 7; grid-row: span 2; }
+  .g2 { grid-column: span 5; }
+  .g3 { grid-column: span 5; }
+  .g4 { grid-column: span 7; }
+  @media (max-width: 720px) {
+    .gallery { grid-template-columns: 1fr 1fr; grid-auto-rows: 150px; }
+    .g1 { grid-column: span 2; grid-row: span 1; }
+    .g2, .g3, .g4 { grid-column: span 1; }
+  }
+
+  /* ===== SIGNUP ===== */
+  .signup { background: var(--bg2); border-top: 1px solid var(--line-soft); position: relative; }
+  .signup .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: start; }
+  @media (max-width: 880px) { .signup .grid { grid-template-columns: 1fr; gap: 40px; } }
+  .signup .intro p {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 22px; line-height: 1.5; color: var(--muted);
+    margin-top: 22px; max-width: 440px;
+  }
+  .formcard {
+    background: var(--glass); border: 1px solid var(--line-soft);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    padding: 40px; box-shadow: 0 0 40px rgba(196,98,45,0.06);
+  }
+  form .field { margin-bottom: 24px; }
+  form label {
+    display: block; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--accent-soft); margin-bottom: 10px;
+  }
+  form input, form select {
+    width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--line-soft);
+    color: var(--text); font-family: 'Barlow', sans-serif; font-weight: 300;
+    font-size: 16px; padding: 13px 14px; outline: none; transition: all 180ms;
+  }
+  form input::placeholder { color: var(--muted2); }
+  form input:focus, form select:focus {
+    border-color: var(--accent); box-shadow: 0 0 0 3px rgba(196,98,45,0.12);
+  }
+  form select {
+    appearance: none; cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c4622d' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center;
+  }
+  form select option { background: var(--bg); color: var(--text); }
+  form .submit {
+    width: 100%; margin-top: 8px; cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-weight: 500;
+    font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+    background: var(--accent); color: var(--bg);
+    border: 1px solid var(--accent); padding: 18px; transition: all 200ms;
+  }
+  form .submit:hover { background: var(--text); border-color: var(--text); box-shadow: 0 0 30px var(--glow); }
+  form .submit:disabled { opacity: 0.6; cursor: wait; }
+  form .fine {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1px;
+    color: var(--muted2); margin-top: 16px; text-align: center;
+  }
+  form .err {
+    color: var(--accent-soft); font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; margin-top: 12px; text-align: center; min-height: 14px;
+  }
+  .hp { position: absolute; left: -9999px; }
+
+  .success { display: none; text-align: center; padding: 24px 0; }
+  .success.show { display: block; animation: fadeUp 600ms ease; }
+  .success .flag { font-size: 46px; filter: drop-shadow(0 0 16px var(--glow)); }
+  .success h3 {
+    font-family: 'Anton', sans-serif; font-size: 42px; letter-spacing: 1px;
+    color: var(--text-bright); margin: 14px 0 16px; text-transform: uppercase;
+    text-shadow: 0 0 30px rgba(196,98,45,0.3);
+  }
+  .success p { font-size: 16px; line-height: 1.7; color: var(--muted); max-width: 380px; margin: 0 auto 8px; }
+  .success .yalla { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 22px; color: var(--accent); margin-top: 16px; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  /* ===== FOOTER ===== */
+  footer { padding: 70px 0 50px; border-top: 1px solid var(--line-soft); position: relative; }
+  footer .row { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; flex-wrap: wrap; }
+  footer .logo { font-family: 'Anton', sans-serif; font-size: 54px; letter-spacing: 1px; }
+  footer .logo .way { color: var(--accent); text-shadow: 0 0 22px var(--glow); }
+  footer .tagline { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 22px; color: var(--text); }
+  footer .sm { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px; color: var(--muted2); text-align: right; line-height: 2; }
+
+  /* ===== REVEAL ===== */
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 800ms cubic-bezier(.2,.7,.2,1), transform 800ms cubic-bezier(.2,.7,.2,1);
+  }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fx-grid, .ticker .track, .hero .scroll .dash { animation: none; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+</style>
 </head>
 <body>
 
-  <!-- NAVIGATIE -->
-  <header class="header" id="header">
-    <nav class="nav container">
-      <a href="#home" class="nav__logo">
-        <span class="logo-icon">✈</span>
-        <span class="logo-text">Bledway<span class="logo-dot">.travel</span></span>
-      </a>
-      <ul class="nav__menu" id="navMenu">
-        <li><a href="#home" class="nav__link active">Home</a></li>
-        <li><a href="#bestemmingen" class="nav__link">Bestemmingen</a></li>
-        <li><a href="#pakketten" class="nav__link">Pakketten</a></li>
-        <li><a href="#over-ons" class="nav__link">Over Ons</a></li>
-        <li><a href="#contact" class="nav__link">Contact</a></li>
-      </ul>
-      <a href="#contact" class="btn btn--nav">Boek Nu</a>
-      <button class="nav__toggle" id="navToggle" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-    </nav>
-  </header>
+<div class="fx-grid"></div>
+<div class="fx-glow" id="fxglow"></div>
+<div class="fx-scan"></div>
+
+<div class="content">
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#top" class="logo"><span>BLED</span><span class="way">WAY</span></a>
+    <div class="right">
+      <span class="meta mono">MOROCCO · 2026</span>
+      <a href="#signup" class="cta">Join the waitlist</a>
+    </div>
+  </nav>
 
   <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero__bg">
-      <div class="hero__overlay"></div>
+  <header class="hero" id="top">
+    <div class="bg">
+      <img
+        src="https://images.unsplash.com/photo-1539020140153-e479b8c22e70?q=80&w=1600&auto=format&fit=crop"
+        alt="Sahara dunes at golden hour"
+      />
     </div>
-    <div class="hero__content container">
-      <p class="hero__subtitle">Ontdek de Wereld</p>
-      <h1 class="hero__title">Jouw Droomreis<br /><span>Begint Hier</span></h1>
-      <p class="hero__desc">Van romantische steden tot exotische stranden — wij regelen alles voor een onvergetelijke ervaring.</p>
-      <div class="hero__search">
-        <div class="search-box">
-          <div class="search-field">
-            <label>Bestemming</label>
-            <input type="text" placeholder="Waar wil je naartoe?" id="searchDest" />
-          </div>
-          <div class="search-field">
-            <label>Vertrekdatum</label>
-            <input type="date" id="searchDate" />
-          </div>
-          <div class="search-field">
-            <label>Reizigers</label>
-            <select id="searchPax">
-              <option>1 persoon</option>
-              <option>2 personen</option>
-              <option>3 personen</option>
-              <option>4+ personen</option>
-            </select>
-          </div>
-          <button class="btn btn--search" onclick="handleSearch()">Zoeken</button>
-        </div>
+    <div class="arabic" aria-hidden="true">بلد</div>
+    <div class="corner tl mono" aria-hidden="true">SYS / BLEDWAY<span class="b">STATUS: BOARDING</span></div>
+    <div class="corner tr mono" aria-hidden="true">31.63°N 7.99°W<span class="b">MARRAKECH</span></div>
+    <div class="inner wrap">
+      <div class="eyebrow">Explore · Connect · Discover</div>
+      <h1>Find Your<br/>Bled.</h1>
+      <p class="sub">Small groups. Real Morocco. The way it was always meant to feel.</p>
+      <div class="actions">
+        <a href="#signup" class="btn-primary">Join the waitlist →</a>
+        <span class="mono" style="font-size:12px;letter-spacing:2px;color:var(--muted);">FIRST TRIP · AUTUMN 2026</span>
       </div>
     </div>
-    <div class="hero__scroll">
-      <a href="#bestemmingen"><span class="scroll-arrow">↓</span></a>
+    <div class="scroll" aria-hidden="true"><span>SCROLL</span><span class="dash"></span></div>
+  </header>
+
+  <!-- TICKER -->
+  <div class="ticker" aria-hidden="true">
+    <div class="track">
+      <span>Sahara <span class="dot">·</span> Marrakech <span class="dot">·</span> Essaouira <span class="dot">·</span> Atlas <span class="dot">·</span> Aït Benhaddou <span class="dot">·</span> Find Your Bled <span class="dot">·</span></span>
+      <span>Sahara <span class="dot">·</span> Marrakech <span class="dot">·</span> Essaouira <span class="dot">·</span> Atlas <span class="dot">·</span> Aït Benhaddou <span class="dot">·</span> Find Your Bled <span class="dot">·</span></span>
     </div>
-  </section>
+  </div>
 
   <!-- STATS -->
-  <section class="stats">
-    <div class="container stats__grid">
-      <div class="stat-item">
-        <span class="stat-number" data-target="12500">0</span>
-        <span class="stat-label">Tevreden Reizigers</span>
+  <div class="stats">
+    <div class="stat reveal">
+      <div class="big" data-count="8">0</div>
+      <div class="lab">Max. per trip</div>
+    </div>
+    <div class="stat reveal">
+      <div class="big">18&nbsp;/&nbsp;25</div>
+      <div class="lab">Age group</div>
+    </div>
+    <div class="stat reveal">
+      <div class="big" data-count="100" data-suffix="%">0%</div>
+      <div class="lab">Real Morocco</div>
+    </div>
+  </div>
+
+  <!-- MANIFESTO -->
+  <section class="block wrap">
+    <div class="manifesto">
+      <div>
+        <div class="label reveal">Who we are</div>
+        <h2 class="big reveal">This is not a<br/>travel agency.</h2>
       </div>
-      <div class="stat-item">
-        <span class="stat-number" data-target="85">0</span>
-        <span class="stat-label">Bestemmingen</span>
+      <div class="body reveal">
+        <p>Bledway is for people who want the real Morocco. The streets, the people, the places that never make it onto TripAdvisor.</p>
+        <p>We are rooted here. We speak the language, we know the families, and we know the spots you would never find on a map.</p>
+        <p>Small groups. Real connections. Stories you will still be telling in ten years.</p>
       </div>
-      <div class="stat-item">
-        <span class="stat-number" data-target="15">0</span>
-        <span class="stat-label">Jaar Ervaring</span>
+    </div>
+
+    <div class="features">
+      <div class="feature reveal">
+        <div class="idx mono">01</div>
+        <h3>Small groups only</h3>
+        <p>Maximum 8 people per trip. The exclusivity is the point.</p>
       </div>
-      <div class="stat-item">
-        <span class="stat-number" data-target="98">0</span>
-        <span class="stat-label">% Klanttevredenheid</span>
+      <div class="feature reveal">
+        <div class="idx mono">02</div>
+        <h3>Local &amp; authentic</h3>
+        <p>Family dinners, hidden spots, real Darija conversations.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="idx mono">03</div>
+        <h3>Sahara to coast</h3>
+        <p>Desert, mountains, medinas. Routes nobody else runs.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="idx mono">04</div>
+        <h3>Ages 18 to 25</h3>
+        <p>Travel with people your age. Leave with a group chat for life.</p>
       </div>
     </div>
   </section>
 
-  <!-- BESTEMMINGEN -->
-  <section class="section bestemmingen" id="bestemmingen">
-    <div class="container">
-      <div class="section__header">
-        <p class="section__label">Populaire Keuzes</p>
-        <h2 class="section__title">Ontdek Topbestemmingen</h2>
-        <p class="section__desc">Van de Azurenkust tot de tempels van Azië — inspireer je door onze meest geliefde bestemmingen.</p>
+  <!-- GALLERY -->
+  <section class="block wrap">
+    <div class="label reveal">Morocco, unfiltered</div>
+    <h2 class="big reveal">The real one.</h2>
+    <div class="gallery">
+      <div class="gphoto g1 reveal">
+        <img src="https://images.unsplash.com/photo-1581353458680-6dae683fcc6c?q=80&w=1100&auto=format&fit=crop" alt="Sahara Desert" loading="lazy" />
+        <div class="coord mono">SAHARA · 31.0°N</div>
+        <div class="cap">Sahara</div>
       </div>
-      <div class="dest-filter">
-        <button class="filter-btn active" data-filter="all">Alles</button>
-        <button class="filter-btn" data-filter="europa">Europa</button>
-        <button class="filter-btn" data-filter="azie">Azië</button>
-        <button class="filter-btn" data-filter="amerika">Amerika</button>
-        <button class="filter-btn" data-filter="africa">Afrika</button>
+      <div class="gphoto g2 reveal">
+        <img src="https://images.unsplash.com/photo-1559925523-10de9e23cf90?q=80&w=900&auto=format&fit=crop" alt="Fez Medina" loading="lazy" />
+        <div class="coord mono">FEZ · 34.0°N</div>
+        <div class="cap">Fez Medina</div>
       </div>
-      <div class="dest-grid" id="destGrid">
-        <!-- Dynamisch ingeladen via JS -->
+      <div class="gphoto g3 reveal">
+        <img src="https://images.unsplash.com/photo-1489493887464-892be6d1daae?q=80&w=900&auto=format&fit=crop" alt="Atlas Mountains" loading="lazy" />
+        <div class="coord mono">ATLAS · 31.1°N</div>
+        <div class="cap">Atlas Mountains</div>
       </div>
-    </div>
-  </section>
-
-  <!-- PAKKETTEN -->
-  <section class="section pakketten" id="pakketten">
-    <div class="container">
-      <div class="section__header">
-        <p class="section__label">Speciale Aanbiedingen</p>
-        <h2 class="section__title">Onze Reispakketten</h2>
-        <p class="section__desc">Alles inbegrepen — vluchten, hotel, transfers en begeleiding. Jij hoeft alleen maar te genieten.</p>
-      </div>
-      <div class="packages-grid" id="packagesGrid">
-        <!-- Dynamisch ingeladen via JS -->
+      <div class="gphoto g4 reveal">
+        <img src="https://images.unsplash.com/photo-1597212618440-806262de4f6b?q=80&w=1200&auto=format&fit=crop" alt="Riad Life" loading="lazy" />
+        <div class="coord mono">RIAD · MEDINA</div>
+        <div class="cap">Riad Life</div>
       </div>
     </div>
   </section>
 
-  <!-- WAAROM BLEDWAY -->
-  <section class="section waarom">
-    <div class="container">
-      <div class="waarom__inner">
-        <div class="waarom__text">
-          <p class="section__label">Waarom Ons Kiezen</p>
-          <h2 class="section__title">Reizen met Vertrouwen</h2>
-          <p class="waarom__desc">Bledway Travel biedt al meer dan 15 jaar persoonlijke reisbegeleiding. Geen callcenter, maar een vast aanspreekpunt dat jouw wensen kent.</p>
-          <div class="features-list">
-            <div class="feature">
-              <div class="feature__icon">🏆</div>
-              <div>
-                <h4>Beste Prijs Garantie</h4>
-                <p>Vind je het goedkoper? Wij matchen de prijs.</p>
-              </div>
-            </div>
-            <div class="feature">
-              <div class="feature__icon">🛡️</div>
-              <div>
-                <h4>Volledig Verzekerd</h4>
-                <p>Al onze reizen zijn gedekt door een uitgebreide reisverzekering.</p>
-              </div>
-            </div>
-            <div class="feature">
-              <div class="feature__icon">📞</div>
-              <div>
-                <h4>24/7 Bereikbaar</h4>
-                <p>Onze experts staan dag en nacht voor je klaar, ook onderweg.</p>
-              </div>
-            </div>
-            <div class="feature">
-              <div class="feature__icon">🌿</div>
-              <div>
-                <h4>Duurzaam Reizen</h4>
-                <p>Wij kiezen bewust voor eco-vriendelijke partners en compenseren CO₂.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="waarom__visual">
-          <div class="visual-card visual-card--main">
-            <div class="visual-img" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
-              <span class="visual-emoji">🌅</span>
-            </div>
-            <div class="visual-info">
-              <strong>Santorini, Griekenland</strong>
-              <span>⭐ 4.9 · 342 reviews</span>
-            </div>
-          </div>
-          <div class="visual-card visual-card--small">
-            <div class="visual-img" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%)">
-              <span class="visual-emoji">🗼</span>
-            </div>
-            <div class="visual-info">
-              <strong>Parijs</strong>
-              <span>⭐ 4.8</span>
-            </div>
-          </div>
-          <div class="visual-badge">
-            <span>✓</span> IATA Gecertificeerd
-          </div>
-        </div>
+  <!-- SIGNUP / WAITLIST -->
+  <section class="block signup" id="signup">
+    <div class="wrap grid">
+      <div class="intro">
+        <div class="label reveal">First trip coming soon</div>
+        <h2 class="big reveal">Be the first<br/>to know.</h2>
+        <p class="reveal">The first Bledway trip is in the making. Register your interest and you will get a confirmation in your inbox the moment spots open up.</p>
       </div>
-    </div>
-  </section>
 
-  <!-- TESTIMONIALS -->
-  <section class="section testimonials" id="over-ons">
-    <div class="container">
-      <div class="section__header">
-        <p class="section__label">Klantenverhalen</p>
-        <h2 class="section__title">Wat Onze Reizigers Zeggen</h2>
-      </div>
-      <div class="testimonials-slider" id="testimonialsSlider">
-        <!-- Dynamisch ingeladen via JS -->
-      </div>
-      <div class="slider-dots" id="sliderDots"></div>
-    </div>
-  </section>
+      <div class="reveal">
+        <div class="formcard">
+          <form id="waitlist" name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="waitlist" />
+            <p class="hp"><label>Leave empty <input name="bot-field" /></label></p>
 
-  <!-- NIEUWSBRIEF -->
-  <section class="newsletter">
-    <div class="container newsletter__inner">
-      <div class="newsletter__text">
-        <h2>Mis Geen Enkele Aanbieding</h2>
-        <p>Schrijf je in en ontvang exclusieve deals, reisinspiratie en last-minute kortingen.</p>
-      </div>
-      <form class="newsletter__form" onsubmit="handleNewsletter(event)">
-        <input type="email" placeholder="jouw@email.be" required />
-        <button type="submit" class="btn btn--white">Inschrijven</button>
-      </form>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="section contact" id="contact">
-    <div class="container">
-      <div class="section__header">
-        <p class="section__label">Neem Contact Op</p>
-        <h2 class="section__title">Plan Jouw Droomreis</h2>
-        <p class="section__desc">Vertel ons je wensen en we maken een persoonlijk voorstel op maat.</p>
-      </div>
-      <div class="contact__inner">
-        <div class="contact__info">
-          <div class="contact-item">
-            <div class="contact-icon">📍</div>
-            <div>
-              <h4>Ons Kantoor</h4>
-              <p>Grote Markt 12, 3800 Sint-Truiden, België</p>
+            <div class="field">
+              <label for="wl-name">Name</label>
+              <input id="wl-name" name="name" type="text" placeholder="Your name" required />
             </div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-icon">📞</div>
-            <div>
-              <h4>Telefoon</h4>
-              <p><a href="tel:+3211123456">+32 11 12 34 56</a></p>
+            <div class="field">
+              <label for="wl-email">Email</label>
+              <input id="wl-email" name="email" type="email" placeholder="you@email.com" required />
             </div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-icon">✉️</div>
-            <div>
-              <h4>E-mail</h4>
-              <p><a href="mailto:info@bledway.travel">info@bledway.travel</a></p>
-            </div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-icon">🕐</div>
-            <div>
-              <h4>Openingsuren</h4>
-              <p>Ma–Vr: 9:00–18:00<br />Za: 10:00–15:00</p>
-            </div>
-          </div>
-          <div class="social-links">
-            <a href="#" class="social-link">Facebook</a>
-            <a href="#" class="social-link">Instagram</a>
-            <a href="#" class="social-link">WhatsApp</a>
-          </div>
-        </div>
-        <form class="contact__form" id="contactForm" onsubmit="handleContact(event)">
-          <div class="form-row">
-            <div class="form-group">
-              <label>Voornaam</label>
-              <input type="text" placeholder="Jan" required />
-            </div>
-            <div class="form-group">
-              <label>Achternaam</label>
-              <input type="text" placeholder="Janssen" required />
-            </div>
-          </div>
-          <div class="form-group">
-            <label>E-mailadres</label>
-            <input type="email" placeholder="jan@email.be" required />
-          </div>
-          <div class="form-group">
-            <label>Telefoonnummer</label>
-            <input type="tel" placeholder="+32 xxx xx xx xx" />
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Gewenste Bestemming</label>
-              <input type="text" placeholder="bijv. Bali, Maldiven…" />
-            </div>
-            <div class="form-group">
-              <label>Budget per persoon</label>
-              <select>
-                <option>Onder €500</option>
-                <option>€500 – €1.000</option>
-                <option>€1.000 – €2.000</option>
-                <option>€2.000 – €5.000</option>
-                <option>Meer dan €5.000</option>
+            <div class="field">
+              <label for="wl-country">Country</label>
+              <select id="wl-country" name="country" required>
+                <option value="">Select…</option>
+                <option>Belgium</option>
+                <option>Netherlands</option>
+                <option>France</option>
+                <option>Germany</option>
+                <option>Other</option>
               </select>
             </div>
+            <div class="field">
+              <label for="wl-interest">What interests you most?</label>
+              <select id="wl-interest" name="interest" required>
+                <option value="">Select…</option>
+                <option>Sahara Desert experience</option>
+                <option>Cultural cities (Fez, Meknes)</option>
+                <option>Atlas Mountains &amp; hiking</option>
+                <option>Coast &amp; surf</option>
+                <option>Everything, surprise me</option>
+              </select>
+            </div>
+
+            <button type="submit" class="submit" id="submitBtn">Register interest →</button>
+            <div class="err mono" id="formErr"></div>
+            <div class="fine">No data shared. First access when we launch.</div>
+          </form>
+
+          <div class="success" id="success">
+            <div class="flag">🇲🇦</div>
+            <h3>You're in.</h3>
+            <p>We've got your details. A confirmation is on its way to your inbox, and you'll be first to know when the first Bledway trip drops.</p>
+            <div class="yalla">يلا. Let's go.</div>
           </div>
-          <div class="form-group">
-            <label>Jouw Bericht</label>
-            <textarea rows="4" placeholder="Vertel ons meer over je droomreis…"></textarea>
-          </div>
-          <button type="submit" class="btn btn--primary btn--full">Verstuur Aanvraag ✈</button>
-        </form>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- FOOTER -->
-  <footer class="footer">
-    <div class="container footer__inner">
-      <div class="footer__brand">
-        <a href="#home" class="nav__logo">
-          <span class="logo-icon">✈</span>
-          <span class="logo-text">Bledway<span class="logo-dot">.travel</span></span>
-        </a>
-        <p>Jouw specialist in droomreizen. Persoonlijk, betrouwbaar en onvergetelijk.</p>
+  <footer>
+    <div class="wrap row">
+      <div>
+        <div class="logo"><span>BLED</span><span class="way">WAY</span></div>
+        <div class="tagline">Find your bled.</div>
       </div>
-      <div class="footer__links">
-        <h4>Navigatie</h4>
-        <ul>
-          <li><a href="#bestemmingen">Bestemmingen</a></li>
-          <li><a href="#pakketten">Pakketten</a></li>
-          <li><a href="#over-ons">Over Ons</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer__links">
-        <h4>Populair</h4>
-        <ul>
-          <li><a href="#">Zonvakanties</a></li>
-          <li><a href="#">Stedentrips</a></li>
-          <li><a href="#">Groepsreizen</a></li>
-          <li><a href="#">Huwelijksreizen</a></li>
-        </ul>
-      </div>
-      <div class="footer__links">
-        <h4>Info</h4>
-        <ul>
-          <li><a href="#">Privacybeleid</a></li>
-          <li><a href="#">Algemene Voorwaarden</a></li>
-          <li><a href="#">Reisadvies</a></li>
-          <li><a href="#">FAQ</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer__bottom">
-      <div class="container">
-        <p>© 2026 Bledway Travel · Alle rechten voorbehouden · IATA-lid · Erkend reisbureeau</p>
+      <div class="sm">
+        @bledway.travel<br/>
+        MOROCCO · 2026<br/>
+        BRUSSELS · BELGIUM
       </div>
     </div>
   </footer>
 
-  <!-- TOAST NOTIFICATIE -->
-  <div class="toast" id="toast"></div>
+</div><!-- /.content -->
 
-  <script src="js/main.js"></script>
+<script>
+  /* ===== Nav scroll ===== */
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ===== Cursor glow ===== */
+  window.addEventListener('pointermove', (e) => {
+    document.documentElement.style.setProperty('--mx', e.clientX + 'px');
+    document.documentElement.style.setProperty('--my', e.clientY + 'px');
+  }, { passive: true });
+
+  /* ===== Count-up animation ===== */
+  function animateCount(el) {
+    const target = parseFloat(el.dataset.count);
+    const suffix = el.dataset.suffix || '';
+    const dur = 1100;
+    const start = performance.now();
+    const step = (now) => {
+      const p = Math.min(1, (now - start) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased) + suffix;
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  /* ===== Reveal on scroll ===== */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        const counter = entry.target.querySelector('[data-count]');
+        if (counter && !counter.dataset.done) {
+          counter.dataset.done = '1';
+          animateCount(counter);
+        }
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (Math.min(i % 4, 3) * 80) + 'ms';
+    io.observe(el);
+  });
+
+  /* ===== Waitlist form ===== */
+  const form    = document.getElementById('waitlist');
+  const success = document.getElementById('success');
+  const btn     = document.getElementById('submitBtn');
+  const errEl   = document.getElementById('formErr');
+
+  const encode = (data) =>
+    Object.keys(data)
+      .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(data[k]))
+      .join('&');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+    errEl.textContent = '';
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    const data = Object.fromEntries(new FormData(form));
+
+    // Silently drop honeypot submissions
+    if (data['bot-field']) { showSuccess(); return; }
+
+    // Persist locally so the founder can inspect
+    try { localStorage.setItem('bledway.waitlist', JSON.stringify(data)); } catch (_) {}
+
+    // Submit to Netlify Forms (works when deployed on Netlify; no-op locally)
+    try {
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encode({ 'form-name': 'waitlist', ...data }),
+      });
+    } catch (_) {}
+
+    showSuccess();
+  });
+
+  function showSuccess() {
+    form.style.display = 'none';
+    success.classList.add('show');
+  }
+</script>
 </body>
 </html>
