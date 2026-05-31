@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bledway Travel — Jouw Droomreis Begint Hier</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- NAVIGATIE -->
+  <header class="header" id="header">
+    <nav class="nav container">
+      <a href="#home" class="nav__logo">
+        <span class="logo-icon">✈</span>
+        <span class="logo-text">Bledway<span class="logo-dot">.travel</span></span>
+      </a>
+      <ul class="nav__menu" id="navMenu">
+        <li><a href="#home" class="nav__link active">Home</a></li>
+        <li><a href="#bestemmingen" class="nav__link">Bestemmingen</a></li>
+        <li><a href="#pakketten" class="nav__link">Pakketten</a></li>
+        <li><a href="#over-ons" class="nav__link">Over Ons</a></li>
+        <li><a href="#contact" class="nav__link">Contact</a></li>
+      </ul>
+      <a href="#contact" class="btn btn--nav">Boek Nu</a>
+      <button class="nav__toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero__bg">
+      <div class="hero__overlay"></div>
+    </div>
+    <div class="hero__content container">
+      <p class="hero__subtitle">Ontdek de Wereld</p>
+      <h1 class="hero__title">Jouw Droomreis<br /><span>Begint Hier</span></h1>
+      <p class="hero__desc">Van romantische steden tot exotische stranden — wij regelen alles voor een onvergetelijke ervaring.</p>
+      <div class="hero__search">
+        <div class="search-box">
+          <div class="search-field">
+            <label>Bestemming</label>
+            <input type="text" placeholder="Waar wil je naartoe?" id="searchDest" />
+          </div>
+          <div class="search-field">
+            <label>Vertrekdatum</label>
+            <input type="date" id="searchDate" />
+          </div>
+          <div class="search-field">
+            <label>Reizigers</label>
+            <select id="searchPax">
+              <option>1 persoon</option>
+              <option>2 personen</option>
+              <option>3 personen</option>
+              <option>4+ personen</option>
+            </select>
+          </div>
+          <button class="btn btn--search" onclick="handleSearch()">Zoeken</button>
+        </div>
+      </div>
+    </div>
+    <div class="hero__scroll">
+      <a href="#bestemmingen"><span class="scroll-arrow">↓</span></a>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="container stats__grid">
+      <div class="stat-item">
+        <span class="stat-number" data-target="12500">0</span>
+        <span class="stat-label">Tevreden Reizigers</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" data-target="85">0</span>
+        <span class="stat-label">Bestemmingen</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" data-target="15">0</span>
+        <span class="stat-label">Jaar Ervaring</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" data-target="98">0</span>
+        <span class="stat-label">% Klanttevredenheid</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BESTEMMINGEN -->
+  <section class="section bestemmingen" id="bestemmingen">
+    <div class="container">
+      <div class="section__header">
+        <p class="section__label">Populaire Keuzes</p>
+        <h2 class="section__title">Ontdek Topbestemmingen</h2>
+        <p class="section__desc">Van de Azurenkust tot de tempels van Azië — inspireer je door onze meest geliefde bestemmingen.</p>
+      </div>
+      <div class="dest-filter">
+        <button class="filter-btn active" data-filter="all">Alles</button>
+        <button class="filter-btn" data-filter="europa">Europa</button>
+        <button class="filter-btn" data-filter="azie">Azië</button>
+        <button class="filter-btn" data-filter="amerika">Amerika</button>
+        <button class="filter-btn" data-filter="africa">Afrika</button>
+      </div>
+      <div class="dest-grid" id="destGrid">
+        <!-- Dynamisch ingeladen via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- PAKKETTEN -->
+  <section class="section pakketten" id="pakketten">
+    <div class="container">
+      <div class="section__header">
+        <p class="section__label">Speciale Aanbiedingen</p>
+        <h2 class="section__title">Onze Reispakketten</h2>
+        <p class="section__desc">Alles inbegrepen — vluchten, hotel, transfers en begeleiding. Jij hoeft alleen maar te genieten.</p>
+      </div>
+      <div class="packages-grid" id="packagesGrid">
+        <!-- Dynamisch ingeladen via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- WAAROM BLEDWAY -->
+  <section class="section waarom">
+    <div class="container">
+      <div class="waarom__inner">
+        <div class="waarom__text">
+          <p class="section__label">Waarom Ons Kiezen</p>
+          <h2 class="section__title">Reizen met Vertrouwen</h2>
+          <p class="waarom__desc">Bledway Travel biedt al meer dan 15 jaar persoonlijke reisbegeleiding. Geen callcenter, maar een vast aanspreekpunt dat jouw wensen kent.</p>
+          <div class="features-list">
+            <div class="feature">
+              <div class="feature__icon">🏆</div>
+              <div>
+                <h4>Beste Prijs Garantie</h4>
+                <p>Vind je het goedkoper? Wij matchen de prijs.</p>
+              </div>
+            </div>
+            <div class="feature">
+              <div class="feature__icon">🛡️</div>
+              <div>
+                <h4>Volledig Verzekerd</h4>
+                <p>Al onze reizen zijn gedekt door een uitgebreide reisverzekering.</p>
+              </div>
+            </div>
+            <div class="feature">
+              <div class="feature__icon">📞</div>
+              <div>
+                <h4>24/7 Bereikbaar</h4>
+                <p>Onze experts staan dag en nacht voor je klaar, ook onderweg.</p>
+              </div>
+            </div>
+            <div class="feature">
+              <div class="feature__icon">🌿</div>
+              <div>
+                <h4>Duurzaam Reizen</h4>
+                <p>Wij kiezen bewust voor eco-vriendelijke partners en compenseren CO₂.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="waarom__visual">
+          <div class="visual-card visual-card--main">
+            <div class="visual-img" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
+              <span class="visual-emoji">🌅</span>
+            </div>
+            <div class="visual-info">
+              <strong>Santorini, Griekenland</strong>
+              <span>⭐ 4.9 · 342 reviews</span>
+            </div>
+          </div>
+          <div class="visual-card visual-card--small">
+            <div class="visual-img" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%)">
+              <span class="visual-emoji">🗼</span>
+            </div>
+            <div class="visual-info">
+              <strong>Parijs</strong>
+              <span>⭐ 4.8</span>
+            </div>
+          </div>
+          <div class="visual-badge">
+            <span>✓</span> IATA Gecertificeerd
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section testimonials" id="over-ons">
+    <div class="container">
+      <div class="section__header">
+        <p class="section__label">Klantenverhalen</p>
+        <h2 class="section__title">Wat Onze Reizigers Zeggen</h2>
+      </div>
+      <div class="testimonials-slider" id="testimonialsSlider">
+        <!-- Dynamisch ingeladen via JS -->
+      </div>
+      <div class="slider-dots" id="sliderDots"></div>
+    </div>
+  </section>
+
+  <!-- NIEUWSBRIEF -->
+  <section class="newsletter">
+    <div class="container newsletter__inner">
+      <div class="newsletter__text">
+        <h2>Mis Geen Enkele Aanbieding</h2>
+        <p>Schrijf je in en ontvang exclusieve deals, reisinspiratie en last-minute kortingen.</p>
+      </div>
+      <form class="newsletter__form" onsubmit="handleNewsletter(event)">
+        <input type="email" placeholder="jouw@email.be" required />
+        <button type="submit" class="btn btn--white">Inschrijven</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section contact" id="contact">
+    <div class="container">
+      <div class="section__header">
+        <p class="section__label">Neem Contact Op</p>
+        <h2 class="section__title">Plan Jouw Droomreis</h2>
+        <p class="section__desc">Vertel ons je wensen en we maken een persoonlijk voorstel op maat.</p>
+      </div>
+      <div class="contact__inner">
+        <div class="contact__info">
+          <div class="contact-item">
+            <div class="contact-icon">📍</div>
+            <div>
+              <h4>Ons Kantoor</h4>
+              <p>Grote Markt 12, 3800 Sint-Truiden, België</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📞</div>
+            <div>
+              <h4>Telefoon</h4>
+              <p><a href="tel:+3211123456">+32 11 12 34 56</a></p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">✉️</div>
+            <div>
+              <h4>E-mail</h4>
+              <p><a href="mailto:info@bledway.travel">info@bledway.travel</a></p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">🕐</div>
+            <div>
+              <h4>Openingsuren</h4>
+              <p>Ma–Vr: 9:00–18:00<br />Za: 10:00–15:00</p>
+            </div>
+          </div>
+          <div class="social-links">
+            <a href="#" class="social-link">Facebook</a>
+            <a href="#" class="social-link">Instagram</a>
+            <a href="#" class="social-link">WhatsApp</a>
+          </div>
+        </div>
+        <form class="contact__form" id="contactForm" onsubmit="handleContact(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Voornaam</label>
+              <input type="text" placeholder="Jan" required />
+            </div>
+            <div class="form-group">
+              <label>Achternaam</label>
+              <input type="text" placeholder="Janssen" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>E-mailadres</label>
+            <input type="email" placeholder="jan@email.be" required />
+          </div>
+          <div class="form-group">
+            <label>Telefoonnummer</label>
+            <input type="tel" placeholder="+32 xxx xx xx xx" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Gewenste Bestemming</label>
+              <input type="text" placeholder="bijv. Bali, Maldiven…" />
+            </div>
+            <div class="form-group">
+              <label>Budget per persoon</label>
+              <select>
+                <option>Onder €500</option>
+                <option>€500 – €1.000</option>
+                <option>€1.000 – €2.000</option>
+                <option>€2.000 – €5.000</option>
+                <option>Meer dan €5.000</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Jouw Bericht</label>
+            <textarea rows="4" placeholder="Vertel ons meer over je droomreis…"></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary btn--full">Verstuur Aanvraag ✈</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <a href="#home" class="nav__logo">
+          <span class="logo-icon">✈</span>
+          <span class="logo-text">Bledway<span class="logo-dot">.travel</span></span>
+        </a>
+        <p>Jouw specialist in droomreizen. Persoonlijk, betrouwbaar en onvergetelijk.</p>
+      </div>
+      <div class="footer__links">
+        <h4>Navigatie</h4>
+        <ul>
+          <li><a href="#bestemmingen">Bestemmingen</a></li>
+          <li><a href="#pakketten">Pakketten</a></li>
+          <li><a href="#over-ons">Over Ons</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer__links">
+        <h4>Populair</h4>
+        <ul>
+          <li><a href="#">Zonvakanties</a></li>
+          <li><a href="#">Stedentrips</a></li>
+          <li><a href="#">Groepsreizen</a></li>
+          <li><a href="#">Huwelijksreizen</a></li>
+        </ul>
+      </div>
+      <div class="footer__links">
+        <h4>Info</h4>
+        <ul>
+          <li><a href="#">Privacybeleid</a></li>
+          <li><a href="#">Algemene Voorwaarden</a></li>
+          <li><a href="#">Reisadvies</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container">
+        <p>© 2026 Bledway Travel · Alle rechten voorbehouden · IATA-lid · Erkend reisbureeau</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- TOAST NOTIFICATIE -->
+  <div class="toast" id="toast"></div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
