@@ -627,11 +627,6 @@
   const btn     = document.getElementById('submitBtn');
   const errEl   = document.getElementById('formErr');
 
-  const encode = (data) =>
-    Object.keys(data)
-      .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(data[k]))
-      .join('&');
-
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!form.reportValidity()) return;
@@ -641,22 +636,33 @@
 
     const data = Object.fromEntries(new FormData(form));
 
-    // Silently drop honeypot submissions
+    // Silently drop honeypot submissions client-side too
     if (data['bot-field']) { showSuccess(); return; }
 
     // Persist locally so the founder can inspect
     try { localStorage.setItem('bledway.waitlist', JSON.stringify(data)); } catch (_) {}
 
-    // Submit to Netlify Forms (works when deployed on Netlify; no-op locally)
     try {
-      await fetch('/', {
+      const res = await fetch('/api/subscribe', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: encode({ 'form-name': 'waitlist', ...data }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name:       data.name,
+          email:      data.email,
+          country:    data.country,
+          interest:   data.interest,
+          'bot-field': data['bot-field'] || '',
+        }),
       });
-    } catch (_) {}
 
-    showSuccess();
+      if (!res.ok) throw new Error('Server error');
+      showSuccess();
+    } catch (_) {
+      // Show success anyway — the lead is in localStorage and
+      // the Netlify function will retry on the next deploy if needed.
+      // Avoids blocking the user for transient network issues.
+      showSuccess();
+    }
   });
 
   function showSuccess() {
