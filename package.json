@@ -2,7 +2,5 @@
   "name": "bledway-travel",
   "version": "1.0.0",
   "type": "module",
-  "dependencies": {
-    "resend": "^3.2.0"
-  }
+  "dependencies": {}
 }
